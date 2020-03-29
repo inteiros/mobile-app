@@ -7,7 +7,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import * as MailComposer from 'expo-mail-composer';
 
 export default function(){
-    const message = 'Olá ONG, estou entrando em contato pois gostaria de ajudar no caso "Arvore" com o valor de 120 reais';
+    const message = `Olá ${incident.name}, estou entrando em contato pois gostaria de ajudar no caso "${incident.title}" com o valor de ${Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(incident.value)}`;
     const Navigation = useNavigation();
     const route = useRoute();
     const incident = route.params.incident;
@@ -18,14 +18,14 @@ export default function(){
 
     function sendMail(){
         MailComposer.composeAsync({
-            subject: 'Herói do caso',
-            recipients: ['jgemendes@yahoo.com.br'],
+            subject: `Herói do caso: ${incident.title}`,
+            recipients: [incident.email],
             body: message, 
         });
     }
 
     function sendWhatsapp(){
-        Linking.openURL(`whatsapp://send?phone=5522981610810&text=${message}`);
+        Linking.openURL(`whatsapp://send?phone=${incident.whatsapp}&text=${message}`);
     }
 
     return(
